@@ -1,32 +1,16 @@
-const mongoose = require("mongoose");
+const express = require("express");
+const app = express();
+const purchase = require("../controller/purchase");
 
-const PurchaseSchema = new mongoose.Schema(
-  {
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
-    },
-    ProductID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "product",
-      required: true,
-    },
-    QuantityPurchased: {
-      type: Number,
-      required: true,
-    },
-    PurchaseDate: {
-      type: String,
-      required: true,
-    },
-    TotalPurchaseAmount: {
-      type: Number,
-      required: true,
-    },
-  },
-  { timestamps: true }
-);
+// Add Purchase
+app.post("/add", purchase.addPurchase);
 
-const Purchase = mongoose.model("purchase", PurchaseSchema);
-module.exports = Purchase;
+// Get All Purchase Data
+app.get("/get/:userID", purchase.getPurchaseData);
+
+app.get("/get/:userID/totalpurchaseamount", purchase.getTotalPurchaseAmount);
+
+module.exports = app;
+
+// http://localhost:4000/api/purchase/add POST
+// http://localhost:4000/api/purchase/get GET

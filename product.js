@@ -1,29 +1,22 @@
-const mongoose = require("mongoose");
+const express = require("express");
+const app = express();
+const product = require("../controller/product");
 
-const ProductSchema = new mongoose.Schema(
-  {
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'users',
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    manufacturer: {
-      type: String,
-      required: true,
-    },
-    stock: {
-      type: Number,
-      required: true,
-    },
-    description: String,
-  },
-  { timestamps: true }
-);
+// Add Product
+app.post("/add", product.addProduct);
 
+// Get All Products
+app.get("/get/:userId", product.getAllProducts);
 
-const Product = mongoose.model("product", ProductSchema);
-module.exports = Product;
+// Delete Selected Product Item
+app.get("/delete/:id", product.deleteSelectedProduct);
+
+// Update Selected Product
+app.post("/update", product.updateSelectedProduct);
+
+// Search Product
+app.get("/search", product.searchProduct);
+
+// http://localhost:4000/api/product/search?searchTerm=fa
+
+module.exports = app;
